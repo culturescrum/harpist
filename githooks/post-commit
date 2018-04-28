@@ -1,0 +1,4 @@
+#!/bin/sh
+
+git push origin --dry-run --follow-tags --porcelain \
+  && git push origin --follow-tags --porcelain
