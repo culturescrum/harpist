@@ -1,11 +1,5 @@
 package models
 
-// Group creates the generic interface for groups and authorization
-type Group interface {
-  owner(User)               bool
-  isMember(User)            bool
-}
-
 // TemporalGroup defines the fields for generic groups
 type TemporalGroup struct {
   ID            int64         `json:"id"`
