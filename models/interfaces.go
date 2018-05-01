@@ -1,5 +1,9 @@
 package models
 
+import (
+	"time"
+)
+
 type HarpistType int
 
 const (
@@ -41,4 +45,10 @@ type GameTier interface {
 
 type CharacterType interface {
 	CharacterName() string
+}
+
+type Audit interface {
+	TotalAtPoint(time.Time) int // total at this point in time
+	Change() int
+	AuditedObject() *Owner // returns Character for Experience, for example
 }
