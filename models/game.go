@@ -56,6 +56,35 @@ type Setting struct {
 	GameAdmins []User
 }
 
+func (s Setting) HarpistType() HarpistType {
+	return SETTING
+}
+
+func (s Setting) Identity() int64 {
+	return s.ID
+}
+
+func (s Setting) isPlayer(c Character) bool {
+	for _, game := range s.GroupMembers() {
+		if game.isPlayer(c) {
+			return true
+		}
+	}
+	return false
+}
+
+func (s Setting) GroupMembers() []Game {
+	return s.Games
+}
+
+func (s Setting) GroupAdmins() []User {
+	return s.GameAdmins
+}
+
+func (s Setting) GroupOwner() Owner {
+	return s.Owner
+}
+
 type Character struct {
 	GameInfo
 }
