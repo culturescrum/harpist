@@ -1,9 +1,5 @@
 package models
 
-import (
-	"time"
-)
-
 type HarpistType int
 
 const (
@@ -48,7 +44,5 @@ type CharacterType interface {
 }
 
 type Audit interface {
-	TotalAtPoint(time.Time) int // total at this point in time
-	Change() int
-	AuditedObject() *Owner // returns Character for Experience, for example
+	AuditedObject() Owner // returns Character for Experience, for example
 }
