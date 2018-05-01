@@ -29,12 +29,16 @@ type GroupMember interface {
 }
 
 // TODO: Game models
-// - [ ] Game Data
-// - [ ] Character
+// - [x] Game Data
+// - [x] Character
 // - [ ] Audit models (experience log, attendance, approvals)
-// - [ ] External Data (OAuth, URLs)
-// - [ ] Events
+// - [ ] ~~External Data (OAuth, URLs)~~
+// - [ ] ~~Events~~
 
 // GameTier implements the interface for various collections in a game
 type GameTier interface {
+}
+
+type CharacterType interface {
+	CharacterName() string
 }
