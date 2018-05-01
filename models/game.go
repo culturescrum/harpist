@@ -50,6 +50,12 @@ func (g Game) GroupOwner() Owner {
 	return g.Owner
 }
 
+type Setting struct {
+	GameInfo
+	Games      []Game
+	GameAdmins []User
+}
+
 type Character struct {
 	GameInfo
 }
