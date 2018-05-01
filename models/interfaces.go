@@ -1,9 +1,31 @@
 package models
 
+type HarpistType int
+
+const (
+	USER HarpistType = iota
+	GROUP
+	CHARACTER
+	GAME
+	SETTING
+)
+
+type Owner interface {
+	HarpistType() HarpistType
+	Identity() int64
+}
+
 // Group creates the generic interface for groups and authorization
 type Group interface {
-  owner(User)               bool
-  isMember(User)            bool
+	isPlayer(GroupMember) bool
+	GroupMembers() []GroupMember
+	GroupAdmins() []User
+	GroupOwner() Owner
+}
+
+type GroupMember interface {
+	MemberName() string
+	MemberIdentity() int64
 }
 
 // TODO: Game models
