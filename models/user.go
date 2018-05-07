@@ -10,7 +10,7 @@ import (
 type User struct {
 	ID           uint   `json:"user_id" yaml:"user_id"`
 	Name         string `json:"name" yaml:"name"`
-	EmailAddress string `json:"email" yaml:"email" gorm:"column:email"`
+	EmailAddress string `json:"email" yaml:"email" gorm:"column:email;unique;not null"`
 	LoginInfo
 }
 
