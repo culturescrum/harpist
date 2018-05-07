@@ -140,10 +140,23 @@ func (a AttendanceLog) AuditedObject() Character {
 }
 
 type Approval struct {
-	ID    int64
-	Owner Owner
+	ID       int64
+	Owner    Owner
+	Approved bool
 }
 
 func (a Approval) AuditedObject() Owner {
 	return a.Owner
+}
+
+func (a Approval) IsApproved() bool {
+	return a.Approved
+}
+
+func (a *Approval) Approve() *Approval {
+	if !a.IsApproved() {
+		a.Approved = true
+	}
+
+	return a
 }
