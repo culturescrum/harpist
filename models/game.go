@@ -6,7 +6,7 @@ import (
 
 // GameInfo implements base Game information used by interfaces
 type GameInfo struct {
-	ID    int64  `json:"id"`
+	ID    uint   `json:"id"`
 	Name  string `json:"name"`
 	Owner Owner
 }
@@ -23,7 +23,7 @@ func (g Game) HarpistType() HarpistType {
 	return GAME
 }
 
-func (g Game) Identity() int64 {
+func (g Game) Identity() uint {
 	return g.ID
 }
 
@@ -58,7 +58,7 @@ func (g Game) MemberName() string {
 	return g.Name
 }
 
-func (g Game) MemberIdentity() int64 {
+func (g Game) MemberIdentity() uint {
 	return g.ID
 }
 
@@ -72,7 +72,7 @@ func (s Setting) HarpistType() HarpistType {
 	return SETTING
 }
 
-func (s Setting) Identity() int64 {
+func (s Setting) Identity() uint {
 	return s.ID
 }
 
@@ -121,7 +121,7 @@ func (c Character) HarpistType() HarpistType {
 	return CHARACTER
 }
 
-func (c Character) Identity() int64 {
+func (c Character) Identity() uint {
 	return c.ID
 }
 
@@ -130,7 +130,7 @@ func (c Character) MemberName() string {
 	return owner.Name
 }
 
-func (c Character) MemberIdentity() int64 {
+func (c Character) MemberIdentity() uint {
 	owner, _ := c.Owner.(User)
 	return owner.ID
 }
