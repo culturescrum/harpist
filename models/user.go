@@ -61,6 +61,6 @@ func (u *User) CheckPassword(password string) error {
 }
 
 // UserName returns the username of the User object
-func (u User) UserName() string {
+func (u User) Username() string {
 	return u.LoginInfo.Username
 }
