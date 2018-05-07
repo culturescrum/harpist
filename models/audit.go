@@ -141,11 +141,11 @@ func (a AttendanceLog) AuditedObject() Character {
 
 type Approval struct {
 	ID       uint
-	Owner    Owner
+	Owner    Harpist
 	Approved bool
 }
 
-func (a Approval) AuditedObject() Owner {
+func (a Approval) AuditedObject() Harpist {
 	return a.Owner
 }
 
