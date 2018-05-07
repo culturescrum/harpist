@@ -2,7 +2,7 @@ package models
 
 // PlayGroup defines the fields for generic groups
 type PlayGroup struct {
-	ID      int64  `json:"id" yaml:"id"`
+	ID      uint  `json:"id" yaml:"id"`
 	Name    string `json:"name" yaml:"name"`
 	Owner   Owner  `json:"owner" yaml:"owner"`
 	Admins  []User `json:"-" yaml:"admins"`
@@ -13,7 +13,7 @@ func (pg PlayGroup) HarpistType() HarpistType {
 	return GROUP
 }
 
-func (pg PlayGroup) Identity() int64 {
+func (pg PlayGroup) Identity() uint {
 	return pg.ID
 }
 
@@ -42,7 +42,7 @@ func (pg PlayGroup) MemberName() string {
 	return pg.Name
 }
 
-func (pg PlayGroup) MemberIdentity() int64 {
+func (pg PlayGroup) MemberIdentity() uint {
 	return pg.ID
 }
 
@@ -55,7 +55,7 @@ func (c Conglomerate) HarpistType() HarpistType {
 	return GROUP
 }
 
-func (c Conglomerate) Identity() int64 {
+func (c Conglomerate) Identity() uint {
 	return c.ID
 }
 

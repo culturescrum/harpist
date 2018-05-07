@@ -12,7 +12,7 @@ const (
 
 type Owner interface {
 	HarpistType() HarpistType
-	Identity() int64
+	Identity() uint
 }
 
 // Group creates the generic interface for groups and authorization
@@ -25,7 +25,7 @@ type Group interface {
 
 type GroupMember interface {
 	MemberName() string
-	MemberIdentity() int64
+	MemberIdentity() uint
 }
 
 // TODO: Game models

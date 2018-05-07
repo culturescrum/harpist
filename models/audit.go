@@ -140,7 +140,7 @@ func (a AttendanceLog) AuditedObject() Character {
 }
 
 type Approval struct {
-	ID       int64
+	ID       uint
 	Owner    Owner
 	Approved bool
 }
