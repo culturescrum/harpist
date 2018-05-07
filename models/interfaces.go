@@ -32,11 +32,10 @@ type GroupMember interface {
 // - [x] Game Data
 // - [x] Character
 // - [ ] Audit models (experience log, attendance, approvals)
-// - [ ] ~~External Data (OAuth, URLs)~~
-// - [ ] ~~Events~~
 
 // GameTier implements the interface for various collections in a game
 type GameTier interface {
+	GameObject() Group // Game / Setting
 }
 
 type CharacterType interface {
@@ -44,5 +43,5 @@ type CharacterType interface {
 }
 
 type Audit interface {
-	AuditedObject() Owner // returns Character for Experience, for example
+	AuditedObject() Owner // returns Character for ExperienceLog, for example
 }

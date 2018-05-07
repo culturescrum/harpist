@@ -54,6 +54,14 @@ func (g Game) GroupOwner() Owner {
 	return g.Owner
 }
 
+func (g Game) MemberName() string {
+	return g.Name
+}
+
+func (g Game) MemberIdentity() int64 {
+	return g.ID
+}
+
 type Setting struct {
 	GameInfo
 	Games      []Game
@@ -89,6 +97,22 @@ func (s Setting) GroupOwner() Owner {
 	return s.Owner
 }
 
+type GameSession struct {
+	HostingEntity *Group
+	Game          *Group
+	scheduledDate time.Time
+	actualDate    time.Time
+	canceled      bool
+}
+
+func (gs GameSession) GameObject() Group {
+	return *gs.Game
+}
+
+func (gs GameSession) Info() Group {
+	return *gs.Game
+}
+
 type Character struct {
 	GameInfo
 }
@@ -113,73 +137,4 @@ func (c Character) MemberIdentity() int64 {
 
 func (c Character) CharacterName() string {
 	return c.Name
-}
-
-type Experience struct {
-	changeAmount int
-	logTime      time.Time
-	next         *Experience
-}
-
-type ExperienceLog struct {
-	ID        int
-	character *Character
-	length    int
-	start     *Experience
-}
-
-func (e *ExperienceLog) Append(newEntry *Experience) {
-	if e.length == 0 {
-		e.start = newEntry
-	} else {
-		current := e.start
-		for current.next != nil {
-			current = current.next
-		}
-		current.next = newEntry
-	}
-	e.length++
-}
-
-func (e ExperienceLog) TotalAtPoint(t time.Time) int {
-	var (
-		total int
-	)
-	current := e.start
-	// As long as the log time isn't after the given time...
-	// TODO: make this more forgiving than microseconds.
-	for current.next != nil {
-		if !current.logTime.After(t) {
-			total += current.changeAmount
-		} else {
-			break
-		}
-		current = current.next
-	}
-	return total
-}
-
-func (e ExperienceLog) Change(t time.Time, u time.Time) int {
-	var (
-		total int
-	)
-	current := e.start
-	for current.next != nil {
-		if u.After(current.logTime) {
-			if current.logTime.After(t) {
-				total += current.changeAmount
-				current = current.next
-			} else {
-				current = current.next
-				continue
-			}
-		} else {
-			break
-		}
-	}
-	return total
-}
-
-func (e ExperienceLog) AuditedObject() Character {
-	return *e.character
 }
