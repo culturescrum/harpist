@@ -1,12 +1,12 @@
 package platform
 
 import (
-  "log"
-  "bytes"
+	"io"
+	"log"
 )
 
 // HarpistLogger defines a wrapper around l.Logger
-func HarpistLogger(buf *bytes.Buffer, env string) *log.Logger {
-  var logger = log.New(buf, "HARPIST: ", log.Ldate | log.Ltime)
-  return logger
+func HarpistLogger(w io.Writer, env string) *log.Logger {
+	var logger = log.New(w, "HARPIST: ", log.Ldate|log.Ltime)
+	return logger
 }
