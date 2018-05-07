@@ -10,7 +10,7 @@ const (
 	SETTING
 )
 
-type Owner interface {
+type Harpist interface {
 	HarpistType() HarpistType
 	Identity() uint
 }
@@ -20,7 +20,7 @@ type Group interface {
 	isPlayer(GroupMember) bool
 	GroupMembers() []GroupMember
 	GroupAdmins() []User
-	GroupOwner() Owner
+	GroupOwner() Harpist
 }
 
 type GroupMember interface {
@@ -43,5 +43,5 @@ type CharacterType interface {
 }
 
 type Audit interface {
-	AuditedObject() Owner // returns Character for ExperienceLog, for example
+	AuditedObject() Harpist // returns Character for ExperienceLog, for example
 }

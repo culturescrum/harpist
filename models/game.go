@@ -8,7 +8,7 @@ import (
 type GameInfo struct {
 	ID    uint   `json:"id"`
 	Name  string `json:"name"`
-	Owner Owner
+	Owner User
 }
 
 // Game implements
@@ -50,7 +50,7 @@ func (g Game) GroupAdmins() []User {
 	return g.GameAdmins
 }
 
-func (g Game) GroupOwner() Owner {
+func (g Game) GroupOwner() Harpist {
 	return g.Owner
 }
 
@@ -93,7 +93,7 @@ func (s Setting) GroupAdmins() []User {
 	return s.GameAdmins
 }
 
-func (s Setting) GroupOwner() Owner {
+func (s Setting) GroupOwner() Harpist {
 	return s.Owner
 }
 
@@ -126,13 +126,11 @@ func (c Character) Identity() uint {
 }
 
 func (c Character) MemberName() string {
-	owner, _ := c.Owner.(User)
-	return owner.Name
+	return c.Owner.Name
 }
 
 func (c Character) MemberIdentity() uint {
-	owner, _ := c.Owner.(User)
-	return owner.ID
+	return c.Owner.ID
 }
 
 func (c Character) CharacterName() string {
