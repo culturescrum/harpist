@@ -72,7 +72,7 @@ func initDatabase() {
 	db.Save(&exampleGroup)
 }
 
-func main() {
+func populateExamples() {
 	loopNums := []int{1, 2, 3, 4, 5, 6, 7, 8, 9}
 	for _, i := range loopNums {
 		logger.Printf("Creating user: User %v", i)
@@ -110,4 +110,9 @@ func main() {
 	game.AddCharacter(character)
 
 	db.Save(&game)
+
+}
+
+func main() {
+	populateExamples()
 }
