@@ -54,7 +54,6 @@ func init() {
 	db.AutoMigrate(&models.PlayGroup{})
 	db.AutoMigrate(&models.Game{})
 	db.AutoMigrate(&models.Character{})
-	initDatabase()
 }
 
 func initDatabase() {
@@ -74,5 +73,9 @@ func initDatabase() {
 }
 
 func main() {
-	ParseArgs()()
+	err := ParseArgs()()
+
+	if err != nil {
+		fmt.Println(err)
+	}
 }
