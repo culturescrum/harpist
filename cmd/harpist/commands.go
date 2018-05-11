@@ -30,8 +30,8 @@ func parseInitCmd() error {
 
 var userCmd = flag.NewFlagSet("user", flag.ExitOnError)
 var userAddCmd = flag.NewFlagSet("add", flag.ExitOnError)
+var userRemoveCmd = flag.NewFlagSet("remove", flag.ExitOnError)
 
-// var userRemoveCmd = flag.NewFlagSet("remove", flag.ExitOnError)
 // var userInfoCmd = flag.NewFlagSet("info", flag.ExitOnError)
 
 func parseUserCmd() error {
@@ -41,6 +41,8 @@ func parseUserCmd() error {
 		switch userCmd.Arg(0) {
 		case "add":
 			parseUserAddCmd()
+		case "remove":
+			parseUserRemCmd()
 		}
 	}
 	return err
@@ -91,6 +93,56 @@ func parseUserAddCmd() error {
 		}
 		user.SetPassword(*password)
 		err = db.Where(models.User{LoginInfo: models.LoginInfo{Username: *username}}).FirstOrCreate(&user).Error
+	}
+	return err
+}
+
+func parseUserRemCmd() error {
+	var (
+		username *string
+		id       *uint
+		email    *string
+		err      error
+
+		user models.User
+	)
+
+	username = userRemoveCmd.String("u", "", "username (shorthand)")
+	email = userRemoveCmd.String("e", "", "email (shorthand)")
+	id = userRemoveCmd.Uint("i", 0, "user id (shorthand)")
+
+	passedArgs := userCmd.Args()
+
+	err = userRemoveCmd.Parse(passedArgs[1:])
+
+	if err != nil {
+		logger.Fatalf("ERROR: %v", err)
+	}
+
+	if userRemoveCmd.Parsed() {
+		if *id != 0 {
+			user = models.User{
+				ID: *id,
+			}
+			err = db.Delete(models.User{}, &user).Error
+			return err
+		}
+		if *username != "" {
+			user = models.User{
+				LoginInfo: models.LoginInfo{
+					Username: *username,
+				},
+			}
+			err = db.Delete(models.User{}, &user).Error
+			return err
+		}
+		if *email != "" {
+			user = models.User{
+				EmailAddress: *email,
+			}
+			err = db.Delete(models.User{}, &user).Error
+			return err
+		}
 	}
 	return err
 }
