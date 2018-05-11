@@ -14,7 +14,21 @@ import (
 	"github.com/culturescrum/harpist/models"
 )
 
-var initCmd = flag.NewFlagSet("init", flag.ExitOnError)
+var (
+	initCmd = flag.NewFlagSet("init", flag.ExitOnError)
+
+	userCmd       = flag.NewFlagSet("user", flag.ExitOnError)
+	userAddCmd    = flag.NewFlagSet("add", flag.ExitOnError)
+	userRemoveCmd = flag.NewFlagSet("remove", flag.ExitOnError)
+
+	// userInfoCmd = flag.NewFlagSet("info", flag.ExitOnError)
+
+	groupCmd = flag.NewFlagSet("group", flag.ExitOnError)
+
+	gameCmd = flag.NewFlagSet("game", flag.ExitOnError)
+
+	charCmd = flag.NewFlagSet("char", flag.ExitOnError)
+)
 
 func parseInitCmd() error {
 	err := initCmd.Parse(os.Args[2:])
@@ -43,12 +57,6 @@ func initDatabase() {
 	exampleGroup.AddMember(adminUser)
 	db.Save(&exampleGroup)
 }
-
-var userCmd = flag.NewFlagSet("user", flag.ExitOnError)
-var userAddCmd = flag.NewFlagSet("add", flag.ExitOnError)
-var userRemoveCmd = flag.NewFlagSet("remove", flag.ExitOnError)
-
-// var userInfoCmd = flag.NewFlagSet("info", flag.ExitOnError)
 
 func parseUserCmd() error {
 	err := userCmd.Parse(os.Args[2:])
@@ -163,8 +171,6 @@ func parseUserRemCmd() error {
 	return err
 }
 
-var groupCmd = flag.NewFlagSet("group", flag.ExitOnError)
-
 func parseGroupCmd() error {
 	err := groupCmd.Parse(os.Args[2:])
 	if groupCmd.Parsed() {
@@ -176,8 +182,6 @@ func parseGroupCmd() error {
 	return err
 }
 
-var gameCmd = flag.NewFlagSet("game", flag.ExitOnError)
-
 func parseGameCmd() error {
 	err := gameCmd.Parse(os.Args[2:])
 	if gameCmd.Parsed() {
@@ -188,8 +192,6 @@ func parseGameCmd() error {
 	}
 	return err
 }
-
-var charCmd = flag.NewFlagSet("char", flag.ExitOnError)
 
 func parseCharCmd() error {
 	err := charCmd.Parse(os.Args[2:])
