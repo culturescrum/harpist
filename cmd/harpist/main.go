@@ -56,22 +56,6 @@ func init() {
 	db.AutoMigrate(&models.Character{})
 }
 
-func initDatabase() {
-	var adminUser = models.User{ID: 1}
-	db.FirstOrInit(&adminUser, &adminUser)
-	adminUser.Name = "Admin User"
-	adminUser.LoginInfo.Username = "admin"
-	adminUser.SetPassword("password")
-	adminUser.EmailAddress = "admin@example.com"
-	db.Save(&adminUser)
-	var exampleGroup = models.PlayGroup{Name: "Example Group"}
-	db.FirstOrCreate(&exampleGroup, models.PlayGroup{ID: 1})
-	exampleGroup.Owner = adminUser
-	exampleGroup.AddAdmin(adminUser)
-	exampleGroup.AddMember(adminUser)
-	db.Save(&exampleGroup)
-}
-
 func main() {
 	err := ParseArgs()()
 
