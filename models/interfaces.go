@@ -10,9 +10,9 @@ const (
 	SETTING
 )
 
-type Owner interface {
+type Harpist interface {
 	HarpistType() HarpistType
-	Identity() int64
+	Identity() uint
 }
 
 // Group creates the generic interface for groups and authorization
@@ -20,12 +20,12 @@ type Group interface {
 	isPlayer(GroupMember) bool
 	GroupMembers() []GroupMember
 	GroupAdmins() []User
-	GroupOwner() Owner
+	GroupOwner() Harpist
 }
 
 type GroupMember interface {
 	MemberName() string
-	MemberIdentity() int64
+	MemberIdentity() uint
 }
 
 // TODO: Game models
@@ -43,5 +43,5 @@ type CharacterType interface {
 }
 
 type Audit interface {
-	AuditedObject() Owner // returns Character for ExperienceLog, for example
+	AuditedObject() Harpist // returns Character for ExperienceLog, for example
 }
