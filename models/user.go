@@ -60,7 +60,7 @@ func (u *User) CheckPassword(password string) error {
 	return bcrypt.CompareHashAndPassword(pwdByteHashed, pwdBytes)
 }
 
-// UserName returns the username of the User object
+// Username returns the username of the User object
 func (u User) Username() string {
 	return u.LoginInfo.Username
 }
