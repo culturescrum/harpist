@@ -74,6 +74,7 @@ func (e ExperienceLog) TotalAtPoint(t time.Time) int {
 	return total
 }
 
+// Change implements convenience method for calculating the amount of XP earned over a period of time
 func (e ExperienceLog) Change(t time.Time, u time.Time) int {
 	var (
 		total int
@@ -95,16 +96,19 @@ func (e ExperienceLog) Change(t time.Time, u time.Time) int {
 	return total
 }
 
+// AuditedObject implements Audit interface
 func (e ExperienceLog) AuditedObject() Character {
 	return *e.character
 }
 
+// Attendance implements a relationship structure for game sessions
 type Attendance struct {
 	session *GameSession
 	logTime time.Time
 	next    *Attendance
 }
 
+// AttendanceLog implements log structure for character attendance to game sessions
 type AttendanceLog struct {
 	ID        int
 	character *Character
@@ -112,6 +116,7 @@ type AttendanceLog struct {
 	start     *Attendance
 }
 
+// Append implements convenience method to append a new attendance entry to the log
 func (e *AttendanceLog) Append(newEntry *Attendance) {
 	if e.length == 0 {
 		e.start = newEntry
@@ -125,6 +130,7 @@ func (e *AttendanceLog) Append(newEntry *Attendance) {
 	e.length++
 }
 
+// Insert implements convenience method to insert a new attendance record in its chronological index
 func (e *AttendanceLog) Insert(newEntry *Attendance) {
 	if e.length == 0 {
 		e.start = newEntry
@@ -143,24 +149,29 @@ func (e *AttendanceLog) Insert(newEntry *Attendance) {
 	e.length++
 }
 
-func (a AttendanceLog) AuditedObject() Character {
-	return *a.character
+// AuditedObject implements Audit interface
+func (e AttendanceLog) AuditedObject() Harpist {
+	return *e.character
 }
 
+// Approval implements generic approval type for later use in auditing
 type Approval struct {
 	ID       uint    `json:"id"`
 	Owner    Harpist `json:"owner"`
 	Approved bool    `json:"approved"`
 }
 
+// AuditedObject implements Audit interface
 func (a Approval) AuditedObject() Harpist {
 	return a.Owner
 }
 
+// IsApproved provides convenience method for checking an approval
 func (a Approval) IsApproved() bool {
 	return a.Approved
 }
 
+// Approve provides a convenience method for approving a requested approval
 func (a *Approval) Approve() *Approval {
 	if !a.IsApproved() {
 		a.Approved = true
