@@ -36,15 +36,15 @@ func populateExamples() {
 
 	storyteller := models.User{ID: 3}
 	db.First(&storyteller)
-	fmt.Printf("Storyteller: %v\n", storyteller.Name)
+	logger.Printf("Storyteller: %v\n", storyteller.Name)
 
 	gameAdmin := models.User{ID: 2}
 	db.First(&gameAdmin)
-	fmt.Printf("Game Admin: %v\n", gameAdmin.Name)
+	logger.Printf("Game Admin: %v\n", gameAdmin.Name)
 
 	player := models.User{ID: 4}
 	db.First(&player)
-	fmt.Printf("Player: %v\n", player.Name)
+	logger.Printf("Player: %v\n", player.Name)
 
 	game := models.Game{Name: "Example Game", Owner: storyteller}
 	game.AddAdmin(gameAdmin)

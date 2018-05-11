@@ -46,6 +46,7 @@ func parseInitCmd() error {
 }
 
 func initDatabase() {
+	logger.Printf("Initializing database...")
 	var adminUser = models.User{ID: 1}
 	db.FirstOrInit(&adminUser, &adminUser)
 	if db.NewRecord(adminUser) {
@@ -54,6 +55,8 @@ func initDatabase() {
 		adminUser.SetPassword("password")
 		adminUser.EmailAddress = "admin@example.com"
 		db.Save(&adminUser)
+	} else {
+		fmt.Printf("Database already initialized for %v environment.", config.Environment)
 	}
 }
 
@@ -97,15 +100,6 @@ func parseUserAddCmd() error {
 		if *username == "" {
 			err = fmt.Errorf("ERROR: Must specify at least a username.")
 			logger.Printf("ERROR: No username specified")
-			logger.Printf("DEBUG: Args parsed: ")
-			for _, arg := range userAddCmd.Args() {
-				logger.Printf("%v, ", arg)
-			}
-			logger.Printf("\n")
-			logger.Printf("DEBUG: Flags parsed: ")
-			userAddCmd.VisitAll(func(f *flag.Flag) {
-				logger.Printf("%v: %v", f.Name, f.Value)
-			})
 			return err
 		}
 		logger.Printf("Adding user %v\n", *username)

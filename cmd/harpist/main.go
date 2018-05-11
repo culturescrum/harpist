@@ -1,26 +1,25 @@
 package main
 
 import (
-	// "flag"
 	"fmt"
 	"log"
 	"os"
-
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/sqlite"
 
 	"github.com/culturescrum/harpist/internal/platform"
 	"github.com/culturescrum/harpist/models"
 )
 
-var config = platform.GetConfig()
-
-var db *gorm.DB
-var logger *log.Logger
+// shorthand
+var (
+	config = platform.HarpistConfig
+	db     = platform.HarpistDB
+	logger *log.Logger
+)
 
 func init() {
 	var lfn = "harpist.log"
 	var _, lcheck = os.Stat(lfn)
+	var hl = platform.HarpistLogger
 
 	// create file if not exists
 	if os.IsNotExist(lcheck) {
@@ -37,17 +36,18 @@ func init() {
 		os.Exit(2)
 	}
 
-	logger = platform.HarpistLogger(logfile, config.Environment)
-	logger.Printf("Logger initialized.")
+	logger = hl(logfile, config.Environment)
 
-	logger.Printf("Initalizing for environment: %v", config.Environment)
+	if config.Environment != "prod" {
+		logger.Printf("Initalizing for environment: %v", config.Environment)
+	}
 
-	logger.Printf("Initializing database.")
 	dbp, err := platform.GetDb()
 	if err != nil {
 		logger.Fatalf("error: %v", err)
 		os.Exit(1)
 	}
+
 	db = dbp
 	db.SetLogger(logger)
 	db.AutoMigrate(&models.User{})
