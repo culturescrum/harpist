@@ -35,7 +35,10 @@ func parseInitCmd() error {
 	if initCmd.Parsed() {
 		if len(initCmd.Args()) == 0 {
 			initDatabase()
-			populateExamples()
+			if config.Environment == "dev" {
+				// In examples.go
+				populateExamples()
+			}
 			return nil
 		}
 	}
@@ -45,17 +48,13 @@ func parseInitCmd() error {
 func initDatabase() {
 	var adminUser = models.User{ID: 1}
 	db.FirstOrInit(&adminUser, &adminUser)
-	adminUser.Name = "Admin User"
-	adminUser.LoginInfo.Username = "admin"
-	adminUser.SetPassword("password")
-	adminUser.EmailAddress = "admin@example.com"
-	db.Save(&adminUser)
-	var exampleGroup = models.PlayGroup{Name: "Example Group"}
-	db.FirstOrCreate(&exampleGroup, models.PlayGroup{ID: 1})
-	exampleGroup.Owner = adminUser
-	exampleGroup.AddAdmin(adminUser)
-	exampleGroup.AddMember(adminUser)
-	db.Save(&exampleGroup)
+	if db.NewRecord(adminUser) {
+		adminUser.Name = "Admin User"
+		adminUser.LoginInfo.Username = "admin"
+		adminUser.SetPassword("password")
+		adminUser.EmailAddress = "admin@example.com"
+		db.Save(&adminUser)
+	}
 }
 
 func parseUserCmd() error {
