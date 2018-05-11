@@ -17,7 +17,7 @@ type User struct {
 // LoginInfo defines structure used for authentication
 type LoginInfo struct {
 	Username     string `json:"username" yaml:"username" gorm:"unique;not null"`
-	PasswordHash string `json:"password" yaml:"password" gorm:"column:password;not null"`
+	PasswordHash string `json:"-" yaml:"-" gorm:"column:password;not null"`
 }
 
 // HarpistType returns the HarpistType
