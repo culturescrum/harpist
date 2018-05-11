@@ -4,12 +4,16 @@ import (
 	"time"
 )
 
+// Experience implements the in-memory representation of Experience
+// TODO: Implement marshalling for storage
 type Experience struct {
 	changeAmount int
 	logTime      time.Time
 	next         *Experience
 }
 
+// ExperienceLog implements the in-memory representation of Experience logs
+// TODO: Implement marshalling for storage
 type ExperienceLog struct {
 	ID        int
 	character *Character
@@ -17,6 +21,7 @@ type ExperienceLog struct {
 	start     *Experience
 }
 
+// Append implemnt the ExperienceLog interface for appending new experience earnings
 func (e *ExperienceLog) Append(newEntry *Experience) {
 	if e.length == 0 {
 		e.start = newEntry
@@ -30,6 +35,7 @@ func (e *ExperienceLog) Append(newEntry *Experience) {
 	e.length++
 }
 
+// Insert allows for inserting traits retroactively or as part of a rebuild of data
 func (e *ExperienceLog) Insert(newEntry *Experience) {
 	if e.length == 0 {
 		e.start = newEntry
@@ -48,6 +54,8 @@ func (e *ExperienceLog) Insert(newEntry *Experience) {
 	e.length++
 }
 
+// TotalAtPoint allows for granular auditing of sheets against expenditures
+// TODO: implement expenditures...
 func (e ExperienceLog) TotalAtPoint(t time.Time) int {
 	var (
 		total int
@@ -140,9 +148,9 @@ func (a AttendanceLog) AuditedObject() Character {
 }
 
 type Approval struct {
-	ID       uint
-	Owner    Harpist
-	Approved bool
+	ID       uint    `json:"id"`
+	Owner    Harpist `json:"owner"`
+	Approved bool    `json:"approved"`
 }
 
 func (a Approval) AuditedObject() Harpist {
