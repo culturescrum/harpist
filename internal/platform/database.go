@@ -8,6 +8,9 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
 
+// HarpistDB platform database
+var HarpistDB, _ = GetDb()
+
 // GetDb only returns development sqlite at the moment
 func GetDb() (*gorm.DB, error) {
 	dbFilename := fmt.Sprintf("%v.db", HarpistConfig.Environment)
