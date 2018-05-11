@@ -6,27 +6,29 @@ import (
 
 // GameInfo implements base Game information used by interfaces
 type GameInfo struct {
-	ID      uint   `json:"id" gorm:"primary_key"`
-	Name    string `json:"name"`
-	Owner   User   `json:"owner" gorm:"foreignkey:OwnerID"`
-	OwnerID uint   `json:"-"`
+	ID      uint   `json:"id" yaml:"id" gorm:"primary_key"`
+	Name    string `json:"name" yaml:"name"`
+	Owner   User   `json:"owner" yaml:"owner" gorm:"foreignkey:OwnerID"`
+	OwnerID uint   `json:"-" yaml:"-"`
 }
 
 // Game implements
 type Game struct {
-	ID         uint        `json:"id" gorm:"primary_key"`
-	Name       string      `json:"name"`
-	Owner      User        `json:"owner" gorm:"foreignkey:OwnerID"`
-	OwnerID    uint        `json:"-"`
-	Characters []Character `json:"characters" gorm:"many2many:game_characters"`
-	Players    []User      `json:"players" gorm:"many2many:game_players"`
-	GameAdmins []User      `json:"admins" gorm:"many2many:game_admins"`
+	ID         uint        `json:"id" yaml:"id" gorm:"primary_key"`
+	Name       string      `json:"name" yaml:"name"`
+	Owner      User        `json:"owner" yaml:"owner" gorm:"foreignkey:OwnerID"`
+	OwnerID    uint        `json:"-" yaml:"-"`
+	Characters []Character `json:"characters" yaml:"characters" gorm:"many2many:game_characters"`
+	Players    []User      `json:"players" yaml:"players" gorm:"many2many:game_players"`
+	GameAdmins []User      `json:"admins" yaml:"admins" gorm:"many2many:game_admins"`
 }
 
+// HarpistType implements...
 func (g Game) HarpistType() HarpistType {
 	return GAME
 }
 
+// Identity implements...
 func (g Game) Identity() uint {
 	return g.ID
 }
@@ -41,26 +43,32 @@ func (g Game) isPlayer(c Character) bool {
 	return false
 }
 
+// GroupMembers implements...
 func (g Game) GroupMembers() []Character {
 	return g.Characters
 }
 
+// GroupAdmins implements...
 func (g Game) GroupAdmins() []User {
 	return g.GameAdmins
 }
 
+// GroupOwner implements...
 func (g Game) GroupOwner() Harpist {
 	return g.Owner
 }
 
+// MemberName implements...
 func (g Game) MemberName() string {
 	return g.Name
 }
 
+// MemberIdentity implements
 func (g Game) MemberIdentity() uint {
 	return g.ID
 }
 
+// AddAdmin implements
 func (g *Game) AddAdmin(u User) error {
 	for _, user := range g.GameAdmins {
 		if user == u {
@@ -72,6 +80,7 @@ func (g *Game) AddAdmin(u User) error {
 	return nil
 }
 
+// RemoveAdmin implements
 func (g *Game) RemoveAdmin(u User) error {
 	for i, user := range g.GameAdmins {
 		if user == u {
@@ -82,6 +91,7 @@ func (g *Game) RemoveAdmin(u User) error {
 	return nil // nothing to do
 }
 
+// AddMember implements
 func (g *Game) AddMember(u User) error {
 	for _, user := range g.Players {
 		if user == u {
@@ -93,6 +103,7 @@ func (g *Game) AddMember(u User) error {
 	return nil
 }
 
+// RemoveMember implements
 func (g *Game) RemoveMember(u User) error {
 	for i, user := range g.Players {
 		if user == u {
@@ -103,6 +114,7 @@ func (g *Game) RemoveMember(u User) error {
 	return nil // nothing to do
 }
 
+// AddCharacter implements
 func (g *Game) AddCharacter(c Character) error {
 	for _, char := range g.Characters {
 		if char == c {
@@ -114,6 +126,7 @@ func (g *Game) AddCharacter(c Character) error {
 	return nil
 }
 
+// RemoveCharacter implements
 func (g *Game) RemoveCharacter(c Character) error {
 	for i, char := range g.Characters {
 		if char == c {
@@ -124,19 +137,22 @@ func (g *Game) RemoveCharacter(c Character) error {
 	return nil // nothing to do
 }
 
+// Setting implements settings - groups of games that can have collections of characters
 type Setting struct {
-	ID         uint   `json:"id" gorm:"primary_key"`
-	Name       string `json:"name"`
-	Owner      User   `json:"owner" gorm:"foreignkey:OwnerID"`
-	OwnerID    uint   `json:"-"`
-	Games      []Game
-	GameAdmins []User
+	ID         uint   `json:"id" yaml:"id" gorm:"primary_key"`
+	Name       string `json:"name" yaml:"name"`
+	Owner      User   `json:"owner" yaml:"owner" gorm:"foreignkey:OwnerID"`
+	OwnerID    uint   `json:"-" yaml:"-"`
+	Games      []Game `json:"games" yaml:"games"`
+	GameAdmins []User `json:"setting_admins" yaml:"setting_admins"`
 }
 
+// HarpistType implements
 func (s Setting) HarpistType() HarpistType {
 	return SETTING
 }
 
+// Identity implements
 func (s Setting) Identity() uint {
 	return s.ID
 }
@@ -150,18 +166,22 @@ func (s Setting) isPlayer(c Character) bool {
 	return false
 }
 
+// GroupMembers implements
 func (s Setting) GroupMembers() []Game {
 	return s.Games
 }
 
+// GroupAdmins implements
 func (s Setting) GroupAdmins() []User {
 	return s.GameAdmins
 }
 
+// GroupOwner implements
 func (s Setting) GroupOwner() Harpist {
 	return s.Owner
 }
 
+// GameSession implements an event that can be used for auditing experience
 type GameSession struct {
 	HostingEntity *Group
 	Game          *Group
@@ -170,37 +190,46 @@ type GameSession struct {
 	canceled      bool
 }
 
+// GameObject implements
 func (gs GameSession) GameObject() Group {
 	return *gs.Game
 }
 
+// Info implements
 func (gs GameSession) Info() Group {
 	return *gs.Game
 }
 
+// Character implements basic chracter structure
+// TODO: implement generic-ish sub-struct or map of optional sheet data for parsing by custom tools
 type Character struct {
-	ID      uint   `json:"id" gorm:"primary_key"`
-	Name    string `json:"name"`
-	Owner   User   `json:"owner" gorm:"foreignkey:OwnerID"`
-	OwnerID uint   `json:"-"`
+	ID      uint   `json:"id" yaml:"id" gorm:"primary_key"`
+	Name    string `json:"name" yaml:"name"`
+	Owner   User   `json:"owner" yaml:"owner" gorm:"foreignkey:OwnerID"`
+	OwnerID uint   `json:"-" yaml:"-"`
 }
 
+// HarpistType implements
 func (c Character) HarpistType() HarpistType {
 	return CHARACTER
 }
 
+// Identity implements
 func (c Character) Identity() uint {
 	return c.ID
 }
 
+// MemberName implements
 func (c Character) MemberName() string {
 	return c.Owner.Name
 }
 
+// MemberIdentity implements
 func (c Character) MemberIdentity() uint {
 	return c.Owner.ID
 }
 
+// CharacterName implements convenience method for retrieving a character's name
 func (c Character) CharacterName() string {
 	return c.Name
 }
