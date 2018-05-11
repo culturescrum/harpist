@@ -1,6 +1,8 @@
 package platform
 
 import (
+	"fmt"
+
 	"github.com/jinzhu/gorm"
 	// needed for gorm init
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
@@ -8,7 +10,8 @@ import (
 
 // GetDb only returns development sqlite at the moment
 func GetDb() (*gorm.DB, error) {
-	db, err := gorm.Open("sqlite3", "development.db")
+	dbFilename := fmt.Sprintf("%v.db", HarpistConfig.Environment)
+	db, err := gorm.Open("sqlite3", dbFilename)
 
 	return db, err
 }
