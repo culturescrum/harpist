@@ -311,6 +311,10 @@ func parseCharCmd() error {
 }
 
 func ParseArgs() func() error {
+	if len(os.Args) < 2 {
+		flag.PrintDefaults()
+		os.Exit(0)
+	}
 	switch os.Args[1] {
 	case "init":
 		return parseInitCmd
@@ -322,9 +326,12 @@ func ParseArgs() func() error {
 		return parseGameCmd
 	case "char":
 		return parseCharCmd
+	case "help":
+		flag.PrintDefaults()
+		os.Exit(0)
 	default:
 		flag.PrintDefaults()
-		os.Exit(1)
+		os.Exit(0)
 	}
 	return nil
 }
