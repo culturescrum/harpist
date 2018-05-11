@@ -5,7 +5,11 @@ import (
 	"flag"
 	"fmt"
 	// "log"
+	"errors"
+	"golang.org/x/crypto/ssh/terminal"
 	"os"
+	"strings"
+	"syscall"
 	//
 	// "github.com/jinzhu/gorm"
 	// _ "github.com/jinzhu/gorm/dialects/sqlite"
@@ -20,8 +24,8 @@ var (
 	userCmd       = flag.NewFlagSet("user", flag.ExitOnError)
 	userAddCmd    = flag.NewFlagSet("add", flag.ExitOnError)
 	userRemoveCmd = flag.NewFlagSet("remove", flag.ExitOnError)
-
-	// userInfoCmd = flag.NewFlagSet("info", flag.ExitOnError)
+	userInfoCmd   = flag.NewFlagSet("info", flag.ExitOnError)
+	userSetPWCmd  = flag.NewFlagSet("set-password", flag.ExitOnError)
 
 	groupCmd = flag.NewFlagSet("group", flag.ExitOnError)
 
@@ -66,9 +70,13 @@ func parseUserCmd() error {
 	if userCmd.Parsed() {
 		switch userCmd.Arg(0) {
 		case "add":
-			parseUserAddCmd()
+			err = parseUserAddCmd()
 		case "remove":
-			parseUserRemCmd()
+			err = parseUserRemCmd()
+		case "info":
+			err = parseUserInfoCmd()
+		case "set-password":
+			err = parseUserSetPWCmd()
 		}
 	}
 	return err
@@ -76,17 +84,14 @@ func parseUserCmd() error {
 
 func parseUserAddCmd() error {
 	var (
-		username *string
+		username string
 		password *string
-		name     *string
-		email    *string
+		name     string
+		email    string
 		err      error
 	)
 
-	username = userAddCmd.String("u", "", "username (shorthand)")
-	password = userAddCmd.String("p", "", "password (shorthand)")
-	name = userAddCmd.String("n", "", "name (shorthand)")
-	email = userAddCmd.String("e", "", "email (shorthand)")
+	password = userAddCmd.String("p", "", "password")
 
 	passedArgs := userCmd.Args()
 
@@ -97,19 +102,31 @@ func parseUserAddCmd() error {
 	}
 
 	if userAddCmd.Parsed() {
-		if *username == "" {
-			err = fmt.Errorf("ERROR: Must specify at least a username.")
+		username = userAddCmd.Arg(0)
+		if username == "" {
+			err = fmt.Errorf("must specify at least a username and email address")
 			logger.Printf("ERROR: No username specified")
 			return err
 		}
-		logger.Printf("Adding user %v\n", *username)
-		user := models.User{
-			LoginInfo:    models.LoginInfo{Username: *username},
-			Name:         *name,
-			EmailAddress: *email,
+		email = userAddCmd.Arg(1)
+		if email == "" {
+			err = fmt.Errorf("must specify at least a username and email address")
+			logger.Printf("ERROR: No email specified")
+			return err
 		}
-		user.SetPassword(*password)
-		err = db.Where(models.User{LoginInfo: models.LoginInfo{Username: *username}}).FirstOrCreate(&user).Error
+		name = strings.Join(userAddCmd.Args()[2:], " ")
+
+		user := models.User{LoginInfo: models.LoginInfo{Username: username}}
+		db.Where(user).First(&user)
+
+		if db.NewRecord(user) {
+			logger.Printf("Adding user %v\n", username)
+			user.Name = name
+			user.EmailAddress = email
+			user.SetPassword(*password)
+			db.Create(&user)
+			err = db.Save(&user).Error
+		}
 	}
 	return err
 }
@@ -133,7 +150,7 @@ func parseUserRemCmd() error {
 	err = userRemoveCmd.Parse(passedArgs[1:])
 
 	if err != nil {
-		logger.Fatalf("ERROR: %v", err)
+		logger.Printf("ERROR: %v", err)
 	}
 
 	if userRemoveCmd.Parsed() {
@@ -162,6 +179,102 @@ func parseUserRemCmd() error {
 		}
 	}
 	return err
+}
+
+func parseUserInfoCmd() error {
+	var (
+		username string
+		id       *uint
+		email    *string
+		err      error
+
+		user = models.User{}
+	)
+
+	email = userInfoCmd.String("e", "", "email (shorthand)")
+	id = userInfoCmd.Uint("i", 0, "user id (shorthand)")
+
+	passedArgs := userCmd.Args()
+
+	err = userInfoCmd.Parse(passedArgs[1:])
+	if err != nil {
+		logger.Printf("ERROR: %v", err)
+	}
+
+	if userInfoCmd.Parsed() {
+		username = userInfoCmd.Arg(0)
+
+		if username == "" {
+			if *id != 0 {
+				user.ID = *id
+			}
+			if *email != "" {
+				user.EmailAddress = *email
+			}
+		}
+		user.LoginInfo.Username = username
+
+		err = db.Find(&user, user).Error
+		if err != nil {
+			return err
+		}
+		fmt.Println("User Details:")
+		fmt.Printf("\t- ID: %v\n", user.ID)
+		fmt.Printf("\t- Username: %v\n", user.Username())
+		fmt.Printf("\t- Name: %v\n", user.MemberName())
+		fmt.Printf("\t- Email: %v\n", user.EmailAddress)
+		return nil
+	}
+	return err
+}
+
+func parseUserSetPWCmd() error {
+	var (
+		password     string
+		err          error
+		bytePassword []byte
+		byteConfirm  []byte
+		confirm      string
+		user         = models.User{}
+	)
+
+	passedArgs := userCmd.Args()
+
+	err = userSetPWCmd.Parse(passedArgs[1:])
+	if err != nil {
+		logger.Printf("ERROR: %v", err)
+	}
+	if userSetPWCmd.Parsed() {
+		user.LoginInfo.Username = userSetPWCmd.Arg(0)
+		password = userSetPWCmd.Arg(1)
+		err = db.Find(&user, user).Error
+		if err != nil {
+			return err
+		}
+		if password == "" {
+			fmt.Print("Password: ")
+			bytePassword, err = terminal.ReadPassword(int(syscall.Stderr))
+			fmt.Println("")
+			if err != nil {
+				return err
+			}
+			password = string(bytePassword)
+			fmt.Print("Re-enter Password: ")
+			byteConfirm, err = terminal.ReadPassword(int(syscall.Stderr))
+			fmt.Println("")
+			if err != nil {
+				return err
+			}
+			confirm = string(byteConfirm)
+			if confirm != password {
+				return errors.New("passwords do not match")
+			}
+		}
+		user.SetPassword(password)
+		err = db.Save(&user).Error
+		return err
+	}
+	return errors.New("record not found")
 }
 
 func parseGroupCmd() error {
