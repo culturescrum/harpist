@@ -15,7 +15,7 @@ import (
 	// _ "github.com/jinzhu/gorm/dialects/sqlite"
 	//
 	// "github.com/culturescrum/harpist/internal/platform"
-	"github.com/culturescrum/harpist/models"
+	"github.com/go-harpist/harpist/models"
 )
 
 var (

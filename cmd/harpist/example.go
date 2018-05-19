@@ -4,7 +4,7 @@ import (
 	// "flag"
 	"fmt"
 
-	"github.com/culturescrum/harpist/models"
+	"github.com/go-harpist/harpist/models"
 )
 
 func populateExamples() {

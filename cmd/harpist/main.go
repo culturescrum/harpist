@@ -5,8 +5,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/culturescrum/harpist/internal/platform"
-	"github.com/culturescrum/harpist/models"
+	"github.com/go-harpist/harpist/models"
+	"github.com/go-harpist/harpist/platform"
 )
 
 // shorthand
