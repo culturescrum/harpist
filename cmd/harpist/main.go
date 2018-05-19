@@ -5,8 +5,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/go-harpist/harpist/internal/platform"
 	"github.com/go-harpist/harpist/models"
+	"github.com/go-harpist/harpist/platform"
 )
 
 // shorthand
