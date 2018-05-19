@@ -89,7 +89,6 @@ func parseUserAddCmd() error {
 		name     string
 		email    string
 		err      error
-		// Usage defines shortcut method for printing out harpist usage
 	)
 
 	password = userAddCmd.String("p", "", "password")
