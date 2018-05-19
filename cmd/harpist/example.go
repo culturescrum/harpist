@@ -4,7 +4,7 @@ import (
 	// "flag"
 	"fmt"
 
-	"github.com/go-harpist/harpist/models"
+	"gopkg.in/harpist.v0/models"
 )
 
 func populateExamples() {
