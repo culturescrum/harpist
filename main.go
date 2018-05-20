@@ -2,12 +2,12 @@ package harpist
 
 import (
 	"fmt"
-	"io"
 	"log"
 	"os"
 	//  "runtime"
 
 	"github.com/jinzhu/gorm"
+	"gopkg.in/harpist.v0/models"
 	// needed for gorm init
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
@@ -19,6 +19,16 @@ var (
 	HarpistDB, _  = GetDb()
 	HarpistLogger = GetLogger()
 )
+
+func init() {
+	var db = HarpistDB
+	db.SetLogger(HarpistLogger)
+	db.AutoMigrate(&models.User{})
+	db.AutoMigrate(&models.PlayGroup{})
+	db.AutoMigrate(&models.Game{})
+	db.AutoMigrate(&models.Character{})
+
+}
 
 // TODO: add functionality for application-level Config
 
