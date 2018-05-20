@@ -34,13 +34,6 @@ func GetConfig() Config {
 
 }
 
-// HarpistLogger defines a wrapper around l.Logger
-// TODO: make this an exported var that calls GetLogger()
-func oldHarpistLogger(w io.Writer, env string) *log.Logger {
-	var logger = log.New(w, "HARPIST: ", log.Ldate|log.Ltime)
-	return logger
-}
-
 // TODO: implement GetLogger(); should pull from environment default values
 func GetLogger() *log.Logger {
 
@@ -61,7 +54,7 @@ func GetLogger() *log.Logger {
 		fmt.Printf("Error creating log file, something is wrong: %v", err)
 		os.Exit(2)
 	}
-	logger := log.New(logfile, "HARPIST: ", log.Ldate|log.Ltime)
+	var logger = log.New(logfile, "HARPIST: ", log.Ldate|log.Ltime)
 
 	return logger
 }
