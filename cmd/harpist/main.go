@@ -5,21 +5,21 @@ import (
 	"log"
 	"os"
 
+	"gopkg.in/harpist.v0"
 	"gopkg.in/harpist.v0/models"
-	"gopkg.in/harpist.v0/platform"
 )
 
 // shorthand
 var (
-	config = platform.HarpistConfig
-	db     = platform.HarpistDB
+	config = harpist.HarpistConfig
+	db     = harpist.HarpistDB
 	logger *log.Logger
 )
 
 func init() {
 	var lfn = "harpist.log"
 	var _, lcheck = os.Stat(lfn)
-	var hl = platform.HarpistLogger
+	var hl = harpist.HarpistLogger
 
 	// create file if not exists
 	if os.IsNotExist(lcheck) {
@@ -42,7 +42,7 @@ func init() {
 		logger.Printf("Initalizing for environment: %v", config.Environment)
 	}
 
-	dbp, err := platform.GetDb()
+	dbp, err := harpist.GetDb()
 	if err != nil {
 		logger.Fatalf("error: %v", err)
 		os.Exit(1)
