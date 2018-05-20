@@ -1,4 +1,4 @@
-package auth
+package harpist
 
 import (
 	// "encoding/json"
@@ -13,6 +13,11 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
+// Exception implements a structure for passing exceptions via json
+type Exception struct {
+	Message string `json:"message"`
+}
+
 // UserClaim is for web interactions with the API and authentication
 type UserClaim struct {
 	*jwt.StandardClaims
@@ -20,4 +25,5 @@ type UserClaim struct {
 	Username  string
 	Name      string
 	UserID    uint
+	// TODO: implement group pinning here to reduce membership look-ups
 }

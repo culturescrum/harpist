@@ -14,7 +14,7 @@ import (
 	// "github.com/jinzhu/gorm"
 	// _ "github.com/jinzhu/gorm/dialects/sqlite"
 	//
-	// "github.com/culturescrum/harpist/internal/platform"
+	// "gopkg.in/harpist.v0"
 	"gopkg.in/harpist.v0/models"
 )
 
