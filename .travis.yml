@@ -20,3 +20,4 @@ deploy:
   file: ''
   on:
     repo: go-harpist/harpist
+    branch: master
