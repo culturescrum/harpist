@@ -6,13 +6,6 @@ branches:
   only:
     - master
 
-after_success:
-  # Set up git user name and tag this commit
-  - git config --local user.name "tsal"
-  - git config --local user.email "mking@arikel.net"
-  - "{ sed -nE 's/^[ \\t]*\"version\": \"([0-9]{1,}\\.[0-9]{1,}\\.)[0-9x]{1,}\",$/\\1/p' package.json; git describe --abbrev=0 | sed -E 's/^v([0-9]{1,}\\.[0-9]{1,}\\.)([0-9]{1,})$/\\1 \\2/g'; } | tr \"\\n\" \" \" | awk '{printf($1==$2?\"v\"$2$3+1:\"v\"$1\"0\")}' | xargs -I {} git tag -a {} -m \"{}\"\n"
-  - "export TRAVIS_TAG=$(npm --no-git-tag-version version from-git)"
-
 deploy:
   skip_cleanup: true
   provider: releases
@@ -21,5 +14,4 @@ deploy:
   file: 'package.json'
   on:
     repo: go-harpist/harpist
-    condition: $TRAVIS_BRANCH =~ ^master$
-    tags: true
+    branch: master
