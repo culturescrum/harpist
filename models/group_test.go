@@ -19,6 +19,12 @@ func init() {
 		harpist.HarpistDB.Create(&TestUser)
 		_ = harpist.HarpistDB.Save(&TestUser).Error
 	}
+
+	if harpist.HarpistDB.NewRecord(TestGroup) {
+		TestGroup.Owner = TestUser
+		_ = harpist.HarpistDB.Save(&TestGroup).Error
+	}
+
 }
 
 func TestGroupCreate(t *testing.T) {
@@ -48,7 +54,7 @@ func TestGroupHarpistType(t *testing.T) {
 
 func TestGroupIdentity(t *testing.T) {
 	group := PlayGroup{}
-	harpist.HarpistDB.Where(TestGroup).First(&group)
+	harpist.HarpistDB.First(&group)
 	if group.Identity() != 1 {
 		t.Error("Identity() does not test group ID 1")
 	}
@@ -70,7 +76,7 @@ func TestGroupOwner(t *testing.T) {
 func TestGroupMemberName(t *testing.T) {
 	group := PlayGroup{}
 
-	harpist.HarpistDB.Where(TestGroup).First(&group)
+	harpist.HarpistDB.First(&group)
 	if group.MemberName() != "Test Group" {
 		t.Errorf("MemberName() does not return 'Test Group', returns %v", group.MemberName())
 	}
