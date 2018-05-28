@@ -72,7 +72,7 @@ func TestGroupMemberName(t *testing.T) {
 
 	harpist.HarpistDB.Where(TestGroup).First(&group)
 	if group.MemberName() != "Test Group" {
-		t.Error("MemberName() does not return 'Test Group'")
+		t.Errorf("MemberName() does not return 'Test Group', returns %v", group.MemberName())
 	}
 }
 
