@@ -8,3 +8,5 @@ functionality compatible within the v0.* series, things _will_ move around.
 [gopkg.in/harpist.v0](https://gopkg.in/harpist.v0)
 
 [godocs](https://godoc.org/gopkg.in/harpist.v0)
+
+[![Build Status](https://travis-ci.org/go-harpist/harpist.svg?branch=master)](https://travis-ci.org/go-harpist/harpist)
