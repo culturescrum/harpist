@@ -23,11 +23,9 @@ var (
 func init() {
 	var db = HarpistDB
 	db.SetLogger(HarpistLogger)
-	db.AutoMigrate(&models.User{})
-	db.AutoMigrate(&models.PlayGroup{})
-	db.AutoMigrate(&models.Game{})
-	db.AutoMigrate(&models.Character{})
-
+	for _, model := range models.CoreModels {
+		db.AutoMigrate(model)
+	}
 }
 
 // TODO: add functionality for application-level Config
