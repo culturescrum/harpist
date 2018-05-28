@@ -5,13 +5,3 @@ go:
 branches:
   only:
     - master
-
-deploy:
-  skip_cleanup: true
-  provider: releases
-  api_key:
-    secure: aC85vkFK27jehgnm6bGzISuG79gr9T8MiAuKMBTtrJWfwqSw8Q33S5YXFLtA3zW3nGgJ5BhN2B8CyCA3/EyLowVYJy318crzayW16gSsbYgrf7LgitRWyKAp1V0S4ljnyb6PvhFJYGwy5ftlU9y/VusmEvXGT9NgVa16intlIvh9P0+R4NiROr3v0GESlFw0euShZxn66Umsoi0W89PTOnrzJ9FbwtpVQnSRG8xdRsFJb2cad54EmDKdusoosVKA9UnFDJbm96TWG+4iNeBAqwsdCuadbzkykxr4XZRmRaiw4z+N3usZkH7M7Af3xkkX7eFE4Qk2LZ/cAgEn0cWjI7+caytX6bPyf1T/Gn0OAaqAw2pbb+xPGWeZpK4GP+hMihOR7qcbfOnUs12jig55iG5SdR1D5Oqe/uOIzCkYEPou/XSrh+ji5/6E1Fjlj7a/LfVgd+sbMoMAG98OzoP93BOnRNXl9KimY3L5IS0VVGJJ8gyYqdXnpJW4fe2UdKrHXhRkom4qExtLM8mGpMeYsbBOjkVmoV8ZQMOe2fZcFYlOAevFGKHZDLzEwNtHQLpLLIE0upkVeTDfZmGEL8MZMrr4ITT9SgpMH+uUQzYw14JiD0a7QSmRsVNoETNb9FcBaV8vW+WS15RuLhj0iuPOp2l4lIwBa4gEDKJ2jkPZo6s=
-  file: 'package.json'
-  on:
-    repo: go-harpist/harpist
-    branch: master
