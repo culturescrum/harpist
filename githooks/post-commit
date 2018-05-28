@@ -1,4 +1,10 @@
 #!/bin/sh
 
-git push origin --dry-run --follow-tags --porcelain \
-  && git push origin --follow-tags --porcelain
+# 
+if [ "$CONTINUOUS_INTEGRATION" = "true" ]; then
+  git push origin --dry-run --follow-tags --porcelain \
+    && git push origin --follow-tags --porcelain
+else
+  git push origin --dry-run --follow-tags --porcelain 
+fi
+
