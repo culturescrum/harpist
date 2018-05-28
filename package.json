@@ -1,6 +1,6 @@
 {
   "name": "harpist",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "harpist larp management api",
   "main": "go build",
   "scripts": {
