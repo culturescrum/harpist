@@ -107,7 +107,7 @@ func TestGroupAddAdmin(t *testing.T) {
 	if err != nil {
 		t.Error("Unable to add admin to test group")
 	}
-	var isAdmin bool = false
+	var isAdmin bool
 
 	for _, u := range group.GroupAdmins() {
 		user := User{}
