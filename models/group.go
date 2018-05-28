@@ -45,7 +45,7 @@ func (pg PlayGroup) GroupAdmins() []User {
 	return pg.Admins
 }
 
-// GroupOwner implements Group interface
+// GroupOwner implements Group interface, returning the struct of the Owner; DB fetch is not included
 func (pg PlayGroup) GroupOwner() Harpist {
 	return pg.Owner
 }
