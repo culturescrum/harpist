@@ -41,7 +41,14 @@ func TestInit(t *testing.T) {
 
 	_, lcheck := os.Stat("harpist.dev.log")
 	if os.IsNotExist(lcheck) {
-		t.Errorf("Logger did not initialize new log file")
+		t.Error("Logger did not initialize new log file")
 	}
 
+	HarpistConfig = Config{Environment: "test"}
+	HarpistLogger = GetLogger()
+	HarpistDB, _ = GetDb()
+	_, ltcheck := os.Stat("harpist.test.log")
+	if os.IsNotExist(ltcheck) {
+		t.Error("New Logger instance did not pick up environment change")
+	}
 }

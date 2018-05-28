@@ -16,7 +16,8 @@ var (
 	// HarpistConfig sets the platform-level Config
 	HarpistConfig = GetConfig()
 	// HarpistDB platform database
-	HarpistDB, _  = GetDb()
+	HarpistDB, _ = GetDb()
+	// HarpistLogger defines a central logger with environment pivots
 	HarpistLogger = GetLogger()
 )
 
@@ -42,7 +43,7 @@ func GetConfig() Config {
 
 }
 
-// TODO: implement GetLogger(); should pull from environment default values
+// GetLogger returns a standard logger instance for any project to use.
 func GetLogger() *log.Logger {
 
 	lfn := fmt.Sprintf("harpist.%v.log", HarpistConfig.Environment)
