@@ -3,15 +3,15 @@ go:
 - 1.10.x
 
 branches:
-  except:
-    - /^v?\d+\.\d+\.\d+$/
+  only:
+    - master
 
 before_deploy:
   # Set up git user name and tag this commit
   - git config --local user.name "tsal"
   - git config --local user.email "mking@arikel.net"
   - "{ sed -nE 's/^[ \\t]*\"version\": \"([0-9]{1,}\\.[0-9]{1,}\\.)[0-9x]{1,}\",$/\\1/p' package.json; git describe --abbrev=0 | sed -E 's/^v([0-9]{1,}\\.[0-9]{1,}\\.)([0-9]{1,})$/\\1 \\2/g'; } | tr \"\\n\" \" \" | awk '{printf($1==$2?\"v\"$2$3+1:\"v\"$1\"0\")}' | xargs -I {} git tag -a {} -m \"{}\"\n"
-  - npm --no-git-tag-version version from-git
+  - "export TRAVIS_TAG=$(npm --no-git-tag-version version from-git)"
 
 deploy:
   provider: releases
@@ -21,3 +21,4 @@ deploy:
   on:
     repo: go-harpist/harpist
     branch: master
+    tags: true
