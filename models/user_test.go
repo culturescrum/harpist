@@ -35,7 +35,7 @@ func TestUserCreate(t *testing.T) {
 	}
 }
 
-func TestHarpistType(t *testing.T) {
+func TestUserHarpistType(t *testing.T) {
 	user := User{}
 
 	harpist.HarpistDB.Where(TestUser).First(&user)
@@ -44,7 +44,7 @@ func TestHarpistType(t *testing.T) {
 	}
 }
 
-func TestIdentity(t *testing.T) {
+func TestUserIdentity(t *testing.T) {
 	user := User{}
 	harpist.HarpistDB.Where(TestUser).First(&user)
 	if user.Identity() != 1 {
@@ -55,7 +55,7 @@ func TestIdentity(t *testing.T) {
 	}
 }
 
-func TestMemberName(t *testing.T) {
+func TestUserMemberName(t *testing.T) {
 	user := User{}
 
 	harpist.HarpistDB.Where(TestUser).First(&user)
@@ -64,7 +64,7 @@ func TestMemberName(t *testing.T) {
 	}
 }
 
-func TestSetAndCheckPassword(t *testing.T) {
+func TestUserSetAndCheckPassword(t *testing.T) {
 	user := User{}
 
 	harpist.HarpistDB.Where(TestUser).First(&user)
@@ -79,7 +79,7 @@ func TestSetAndCheckPassword(t *testing.T) {
 	}
 }
 
-func TestUsername(t *testing.T) {
+func TestUserUsername(t *testing.T) {
 	user := User{}
 
 	harpist.HarpistDB.Where(TestUser).First(&user)
